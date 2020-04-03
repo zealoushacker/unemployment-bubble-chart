@@ -21,3 +21,10 @@ build/states.json: build/cb_2018_us_state_20m.shp data/claims.csv
 			.translate([width / 2, height / 2])' \
 		--simplify=.5 \
 		-- states=$<
+
+build/us.json: build/states.json
+	node_modules/.bin/topojson-merge \
+		-o $@ \
+		--in-object=states \
+		--out-object=nation \
+		-- $<

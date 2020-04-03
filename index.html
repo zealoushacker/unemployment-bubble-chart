@@ -9,6 +9,17 @@ path {
   stroke-linecap: round;
 }
 
+.land {
+  fill: #ddd;
+}
+
+.border {
+  fill: none;
+  stroke: #fff;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
 </style>
 <body>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -21,16 +32,33 @@ var width = 960,
 var path = d3.geo.path()
     .projection(null);
 
+var radius = d3.scale.sqrt()
+    .domain([0, 1e6])
+    .range([0, 15]);
+
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-d3.json("build/states.json", function(error, us) {
+d3.json("build/us.json", function(error, us) {
   if (error) return console.error(error);
 
-  svg.append("path")
-      .datum(topojson.mesh(us))
+    svg.append("path")
+      .datum(topojson.feature(us, us.objects.nation))
+      .attr("class", "land")
       .attr("d", path);
+
+  svg.append("path")
+      .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+      .attr("class", "border border--state")
+      .attr("d", path);
+  svg.append("g")
+    .attr("class", "bubble")
+  .selectAll("circle")
+    .data(topojson.feature(us, us.objects.states).features)
+  .enter().append("circle")
+    .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+    .attr("r", function(d) { return radius(d.properties.claims); });
 });
 
 </script>
