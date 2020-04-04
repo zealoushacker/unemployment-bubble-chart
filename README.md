@@ -1,6 +1,6 @@
 # unemployment-bubble-chart
 
-This will display the unemployment data for all US states, cumulative, used to display effects of COVID-19.
+This will display the unemployment data for all US states as a bubble chart, cumulative, used to display effects of COVID-19.
 
 Current weeks included: week ending 03/28/2020 and 03/21/2020.
 
