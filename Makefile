@@ -1,3 +1,10 @@
+all: build/us.json
+
+clean: 
+	rm -rf -- build
+
+.PHONY: all clean
+
 # pull state shapefiles from census
 build/cb_2018_us_state_20m.zip:
 	mkdir -p $(dir $@)
@@ -22,6 +29,7 @@ build/states.json: build/cb_2018_us_state_20m.shp data/claims.csv
 		--simplify=.5 \
 		-- states=$<
 
+# build the states topojson 
 build/us.json: build/states.json
 	node_modules/.bin/topojson-merge \
 		-o $@ \
