@@ -1,10 +1,15 @@
 # unemployment-bubble-chart
 
+This will display the unemployment data for all US states, cumulative, used to display effects of COVID-19.
+
+Current weeks included: week ending 03/28/2020 and 03/21/2020.
+
 ## Build instructions
 
 * Pull down this repo
 * `$ make clean && make all`
-* For development, make sure that you have an HTTP Server that can serve up `index.html` - example: `$ python -m SimpleHTTPServer 7800`, if you have python SimpleHTTPServer
+* For development, make sure that you have an HTTP Server that can serve up `index.html` 
+  * example: `$ python -m SimpleHTTPServer 7800`, if you have python SimpleHTTPServer
 * Fire up your favorite HTTP server in the root directory 
 * Fire up index.html - if you use the example above, then it's: `http://localhost:7800/`
 
