@@ -99,7 +99,7 @@ d3.json("build/us.json", function(error, us) {
 
     tooltip
       .style("opacity", 1)
-      .html("<div>State: " + d.properties.name +"</div><div>Claims: " + d.properties.claims + "</div>")
+      .html("<div>" + d.properties.name +"</div><div>" + d.properties.claims + "</div>")
       .style("left", left + "px")
       .style("top", top + "px");
   };
