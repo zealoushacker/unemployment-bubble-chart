@@ -8,6 +8,7 @@
   <div id="container" class="svg-container"></div>
   <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="//d3js.org/topojson.v1.min.js"></script>
+
   <script>
 
   var path = d3.geo.path()
@@ -35,8 +36,10 @@
         right = boundingClientRect.right,
         left = boundingClientRect.left,
         width = boundingClientRect.width,
-        left = right > 300 ? left - parseFloat(tooltip.style("width")) - width : right,
-        top = boundingClientRect.top + parseFloat(tooltip.style("height"))/2;
+        leftOffset = parseFloat(tooltip.style("width")) + parseFloat(tooltip.style("padding")) * 2,
+        topOffset = parseFloat(tooltip.style("height")),
+        left = right > 300 ? left - leftOffset : right,
+        top = boundingClientRect.top + topOffset/2;
 
       tooltip
         .style("opacity", 1)
