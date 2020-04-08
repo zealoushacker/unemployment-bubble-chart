@@ -20,15 +20,12 @@ body {
   left: 0;
 }
 
-.land {
-  fill: #ddd;
-}
-
-.border {
-  fill: none;
+.state {
+  fill: #ccc;
   stroke: #fff;
   stroke-linejoin: round;
   stroke-linecap: round;
+  stroke-width: 1px;
 }
 
 .bubble {
@@ -40,17 +37,6 @@ body {
 .bubble :hover {
   stroke: #000;
   cursor: pointer;
-}
-
-.legend circle {
-  fill: none;
-  stroke: #ccc;
-}
-
-.legend text {
-  fill: #777;
-  font: 10px sans-serif;
-  text-anchor: middle;
 }
 
 .tooltip {
