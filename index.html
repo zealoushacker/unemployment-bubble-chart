@@ -26,9 +26,9 @@
       }
     };
 
-    var claimsColorScale = d3.scaleLinear()
+    var claimsColorScale = d3.scaleQuantize()
       .domain(['4e+3', '1e+6'])
-      .range(d3.schemeReds[6]);
+      .range(['#3B3137', '#4D383E', '#604045', '#523134', '#95565B', '#A95E63', '#BB666A' , '#CE6E71' , '#E07769']);
 
     var _states, _claims, _stateClaims;
 
