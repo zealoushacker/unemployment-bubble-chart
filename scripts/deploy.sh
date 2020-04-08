@@ -7,10 +7,6 @@ setup_git() {
   fi
 }
 
-build_project() {
-  make clean && make all
-}
-
 commit_files() {
   if [[ ! -z "$TRAVIS" ]]; then
     git checkout -b gh-pages
@@ -32,6 +28,5 @@ upload_files() {
 }
 
 setup_git
-build_project
 commit_files
 upload_files
