@@ -8,15 +8,38 @@
   <div id="container" class="svg-container"></div>
   <script src='//d3js.org/d3.v4.min.js'></script>
   <script src="//d3js.org/topojson.v1.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
   <script>
-    var dataReady = function(error, states) {
+
+    var getNumberOfClaimsForState = function(st) {
+      var claim = _claims.records.find(
+        function(claim) { 
+          return claim.fields.state == st.properties.STATE; 
+        }
+      );
+
+      if (!claim) {
+        return '#ccc';
+      } else {
+        return claimsColorScale(claim.fields.claims);
+      }
+    };
+
+    var claimsColorScale = d3.scaleLinear()
+      .domain(['4e+3', '1e+6'])
+      .range(d3.schemeReds[6]);
+
+    var _states, _claims, _stateClaims;
+
+    var dataReady = function(error, states, claims) {
       if (error) throw error;
-      var _states = states;
-      renderMap(_states);
+      _states = states;
+      _claims = claims;
+      renderMap(_states, _claims);
     }
 
-    var renderMap = function(states) {
+    var renderMap = function(states, claims) {
       svg.selectAll('*').remove(); // clear for re-render
       
       svg.selectAll('.states')
@@ -24,7 +47,10 @@
         .enter()
         .append('path')
         .attr('class', 'state')
-        .attr('d', path)
+        .style('fill', function (st) { 
+          return getNumberOfClaimsForState(st) 
+        })
+        .attr('d', path);
     }
 
     var svg = d3.select('#container').append('svg')
@@ -37,8 +63,12 @@
     var projection = d3.geoAlbersUsa();
     var path = d3.geoPath().projection(projection);
 
+    var claimsRequest = d3.json('https://api.airtable.com/v0/appQWZIOAEl6UiPa3/ui_claims?view=Grid%20view')
+      .header('Authorization', 'Bearer keyLVEYQelX6aEgaR');
+
     d3.queue()
       .defer(d3.json, 'data/us-states-simplified.json')
+      .defer(claimsRequest.get)
       .await(dataReady);
 
   </script>
