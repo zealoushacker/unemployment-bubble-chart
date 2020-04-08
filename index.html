@@ -8,34 +8,47 @@
   <div id="container" class="svg-container"></div>
   <script src='//d3js.org/d3.v4.min.js'></script>
   <script src="//d3js.org/topojson.v1.min.js"></script>
-  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  <script src='//cdn.rawgit.com/Caged/d3-tip/v0.8.0-alpha.1/index.js'></script>
 
   <script>
+     var tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .offset([0, 0])
+      .html(function(d) {
+        return '<div>' + d.properties.STATE + '</div>' +
+          '<div>' + getNumberOfClaimsForState(d.properties.STATE) + '</div>' +
+          '<div>unemployed</div>';
+      });
 
-    var getNumberOfClaimsForState = function(st) {
-      var claim = _claims.records.find(
-        function(claim) { 
-          return claim.fields.state == st.properties.STATE; 
-        }
-      );
-
-      if (!claim) {
+    var getColorForNumberOfClaims = function(stateName) {
+      var stateClaims = getNumberOfClaimsForState(stateName); 
+      if (!stateClaims) {
         return '#ccc';
       } else {
-        return claimsColorScale(claim.fields.claims);
+        return claimsColorScale(stateClaims);
       }
+    };
+
+    var getNumberOfClaimsForState = function(stateName) {
+      return _stateClaims[stateName]; 
     };
 
     var claimsColorScale = d3.scaleQuantize()
       .domain(['4e+3', '1e+6'])
       .range(['#3B3137', '#4D383E', '#604045', '#523134', '#95565B', '#A95E63', '#BB666A' , '#CE6E71' , '#E07769']);
 
-    var _states, _claims, _stateClaims;
+    var _states, _claims, _stateClaims = {};
 
     var dataReady = function(error, states, claims) {
       if (error) throw error;
       _states = states;
       _claims = claims;
+
+      // build up the state claim numbers map for easy retrieval later
+      _claims.records.forEach(function(claim) {
+        _stateClaims[claim.fields.state] = claim.fields.claims;
+      });
+
       renderMap(_states, _claims);
     }
 
@@ -48,9 +61,11 @@
         .append('path')
         .attr('class', 'state')
         .style('fill', function (st) { 
-          return getNumberOfClaimsForState(st) 
+          return getColorForNumberOfClaims(st.properties.STATE) 
         })
-        .attr('d', path);
+        .attr('d', path)
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide);
     }
 
     var svg = d3.select('#container').append('svg')
@@ -60,6 +75,7 @@
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .classed('svg-content', true);
 
+    svg.call(tip);
     var projection = d3.geoAlbersUsa();
     var path = d3.geoPath().projection(projection);
 
