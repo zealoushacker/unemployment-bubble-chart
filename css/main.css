@@ -1,0 +1,53 @@
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.svg-content {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.state {
+  fill: #ccc;
+  stroke: #fff;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-width: 1px;
+}
+
+.bubble {
+  fill: #FF5964;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+
+.bubble :hover {
+  stroke: #000;
+  cursor: pointer;
+}
+
+.tooltip {
+  opacity: 0;
+  position: absolute;
+  background: black;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  text-align: center;
+  font: 10px sans-serif;
+  width: 70px;
+  height: 25px;
+}

@@ -1,146 +1,76 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
-
-body {
-  margin: 0; 
-  width: 100%; 
-  height: 100%;
-}
-  
-.svg-container {
-  display: inline-block;
-  position: relative;
-  width: 100%;
-  padding-bottom: 100%;
-  vertical-align: top;
-  overflow: hidden;
-}
-
-.svg-content {
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.land {
-  fill: #ddd;
-}
-
-.border {
-  fill: none;
-  stroke: #fff;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-
-.bubble {
-  fill: #FF5964;
-  stroke: #fff;
-  stroke-width: .5px;
-}
-
-.bubble :hover {
-  stroke: #000;
-  cursor: pointer;
-}
-
-.legend circle {
-  fill: none;
-  stroke: #ccc;
-}
-
-.legend text {
-  fill: #777;
-  font: 10px sans-serif;
-  text-anchor: middle;
-}
-
-.tooltip {
-  opacity: 0;
-  position: absolute;
-  background: black;
-  color: white;
-  border-radius: 5px;
-  padding: 5px;
-  text-align: center;
-  font: 10px sans-serif;
-}
-
-</style>
+<head>
+  <title>Unemployment Bubble Chart</title>
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
 <body>
   <div id="container" class="svg-container"></div>
-<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="//d3js.org/topojson.v1.min.js"></script>
-<script>
+  <script src='//d3js.org/d3.v4.min.js'></script>
+  <script src="//d3js.org/topojson.v1.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
-var path = d3.geo.path()
-    .projection(null);
+  <script>
 
-var radius = d3.scale.sqrt()
-    .domain([7000, 1100000])
-    .range([2, 56]);
+    var getNumberOfClaimsForState = function(st) {
+      var claim = _claims.records.find(
+        function(claim) { 
+          return claim.fields.state == st.properties.STATE; 
+        }
+      );
 
-var svg = d3.select("div#container")
-  .append("svg")
-  .attr("preserveAspectRatio", "xMinYMin meet")
-  .attr("viewBox", "0 0 960 600")
-  .classed("svg-content", true);
+      if (!claim) {
+        return '#ccc';
+      } else {
+        return claimsColorScale(claim.fields.claims);
+      }
+    };
 
-d3.json("build/us.json", function(error, us) {
-  if (error) return console.error(error);
+    var claimsColorScale = d3.scaleLinear()
+      .domain(['4e+3', '1e+6'])
+      .range(d3.schemeReds[6]);
 
-  var tooltip = d3.select("div#container")
-    .append("div")
-    .attr("class", "tooltip");
+    var _states, _claims, _stateClaims;
 
-  var showTooltip = function(d) {
-    var boundingClientRect = this.getBoundingClientRect(),
-      right = boundingClientRect.right,
-      left = boundingClientRect.left,
-      width = boundingClientRect.width,
-      left = right > 300 ? left - parseFloat(tooltip.style("width")) - width : right,
-      top = boundingClientRect.top + parseFloat(tooltip.style("height"))/2;
+    var dataReady = function(error, states, claims) {
+      if (error) throw error;
+      _states = states;
+      _claims = claims;
+      renderMap(_states, _claims);
+    }
 
-    tooltip
-      .style("opacity", 1)
-      .html("<div>" + d.properties.name +"</div><div>" + d.properties.claims + "</div>")
-      .style("left", left + "px")
-      .style("top", top + "px");
-  };
+    var renderMap = function(states, claims) {
+      svg.selectAll('*').remove(); // clear for re-render
+      
+      svg.selectAll('.states')
+        .data(topojson.feature(states, states.objects.states).features)
+        .enter()
+        .append('path')
+        .attr('class', 'state')
+        .style('fill', function (st) { 
+          return getNumberOfClaimsForState(st) 
+        })
+        .attr('d', path);
+    }
 
-  var moveTooltip = function(d) {
-    /*
-    tooltip
-      .style("left", (d3.select(this).attr("cx") + "px"))
-      .style("top", (d3.select(this).attr("cy") + "px"));
-    */
-  };
+    var svg = d3.select('#container').append('svg')
+      .attr('xmlns', 'http://www.w3.org/2000/svg')
+      .attr('version', '1.1')
+      .attr('viewBox', '0 0 900 500')
+      .attr('preserveAspectRatio', 'xMidYMid meet')
+      .classed('svg-content', true);
 
-  var hideTooltip = function(d) {
-    tooltip
-      .style("opacity", 0);
-  };
+    var projection = d3.geoAlbersUsa();
+    var path = d3.geoPath().projection(projection);
 
-  svg.append("path")
-    .datum(topojson.feature(us, us.objects.nation))
-    .attr("class", "land")
-    .attr("d", path);
+    var claimsRequest = d3.json('https://api.airtable.com/v0/appQWZIOAEl6UiPa3/ui_claims?view=Grid%20view')
+      .header('Authorization', 'Bearer keyLVEYQelX6aEgaR');
 
-  svg.append("path")
-    .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-    .attr("class", "border border--state")
-    .attr("d", path);
-  svg.append("g")
-    .attr("class", "bubble")
-  .selectAll("circle")
-    .data(topojson.feature(us, us.objects.states).features)
-  .enter().append("circle")
-    .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
-    .attr("r", function(d) { return radius(d.properties.claims); })
-    .on("mouseover", showTooltip )
-    .on("mouseleave", hideTooltip );
-});
+    d3.queue()
+      .defer(d3.json, 'data/us-states-simplified.json')
+      .defer(claimsRequest.get)
+      .await(dataReady);
 
-</script>
+  </script>
+</body>
+</html>
