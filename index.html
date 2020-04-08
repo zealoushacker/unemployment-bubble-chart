@@ -13,16 +13,11 @@
   <script>
 
     var getNumberOfClaimsForState = function(st) {
-      var claim = _claims.records.find(
-        function(claim) { 
-          return claim.fields.state == st.properties.STATE; 
-        }
-      );
-
-      if (!claim) {
+      var stateClaims = _stateClaims[st.properties.STATE]; 
+      if (!stateClaims) {
         return '#ccc';
       } else {
-        return claimsColorScale(claim.fields.claims);
+        return claimsColorScale(stateClaims);
       }
     };
 
@@ -30,12 +25,18 @@
       .domain(['4e+3', '1e+6'])
       .range(['#3B3137', '#4D383E', '#604045', '#523134', '#95565B', '#A95E63', '#BB666A' , '#CE6E71' , '#E07769']);
 
-    var _states, _claims, _stateClaims;
+    var _states, _claims, _stateClaims = {};
 
     var dataReady = function(error, states, claims) {
       if (error) throw error;
       _states = states;
       _claims = claims;
+
+      // build up the state claim numbers map for easy retrieval later
+      _claims.records.forEach(function(claim) {
+        _stateClaims[claim.fields.state] = claim.fields.claims;
+      });
+
       renderMap(_states, _claims);
     }
 
