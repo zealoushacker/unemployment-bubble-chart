@@ -16,7 +16,7 @@
       .offset([0, 0])
       .html(function(d) {
         return '<div>' + d.properties.STATE + '</div>' +
-          '<div>' + getNumberOfClaimsForState(d.properties.STATE) + '</div>' +
+          '<div>' + getNumberOfClaimsForState(d.properties.STATE).toLocaleString() + '</div>' +
           '<div>unemployed</div>';
       });
 
