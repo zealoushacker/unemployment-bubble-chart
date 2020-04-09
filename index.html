@@ -66,9 +66,9 @@
       _states = states;
       _claims = claims;
       _locations = locations;
-      var claimsNumbers = claims.records.flatMap(function(claim) { return claim.fields.claims; });
-      var minClaims = Math.min(...claimsNumbers);
-      var maxClaims = Math.max(...claimsNumbers);
+
+      var minClaims = claims.records[claims.records.length - 1].fields.claims;
+      var maxClaims = claims.records[0].fields.claims;
 
       _claimsColorScale = d3.scaleQuantize()
         .domain([minClaims, maxClaims])
