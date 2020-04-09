@@ -37,12 +37,37 @@
       .domain(['4e+3', '1e+6'])
       .range(['#3B3137', '#4D383E', '#604045', '#523134', '#95565B', '#A95E63', '#BB666A' , '#CE6E71' , '#E07769']);
 
-    var _states, _claims, _stateClaims = {};
+    var _states, _claims, _stateClaims = {}, _locations;
 
-    var dataReady = function(error, states, claims) {
+    var drawMapCircles = function(layoffs) {
+      var circleGroup = svg.selectAll('circle')
+        .data(_locations.records)
+        .enter()
+        .append('g')
+        .attr('transform', function(d) {
+          return 'translate('+ projection([d.fields.lon, d.fields.lat])+')';
+                    })
+        .attr('class', 'city');
+
+      circleGroup
+        .append('circle')
+        .style('fill', 'red')
+        .style("stroke", "grey")
+        .style('fill-opacity', .8)
+        .attr('r', 5)
+    };
+
+    var layoffsDataReady = function(error, layoffs) {
+      if (error) throw error;
+
+      drawMapCircles(layoffs);
+    }
+
+    var dataReady = function(error, states, claims, locations) {
       if (error) throw error;
       _states = states;
       _claims = claims;
+      _locations = locations;
 
       // build up the state claim numbers map for easy retrieval later
       _claims.records.forEach(function(claim) {
@@ -50,6 +75,17 @@
       });
 
       renderMap(_states, _claims);
+
+      var layoffRecordIds = (locations.records.flatMap(function(r) {
+        return 'RECORD_ID()=\'' + r.fields.layoffs + '\'';
+      })).join(','); 
+
+      var layoffsRequest = d3.json('https://api.airtable.com/v0/appQWZIOAEl6UiPa3/people?view=map_view&&filterByFormula=OR("' + layoffRecordIds + '")')
+        .header('Authorization', 'Bearer keyLVEYQelX6aEgaR');
+
+      d3.queue()
+        .defer(layoffsRequest.get)
+        .await(layoffsDataReady)
     }
 
     var renderMap = function(states, claims) {
@@ -82,9 +118,13 @@
     var claimsRequest = d3.json('https://api.airtable.com/v0/appQWZIOAEl6UiPa3/ui_claims?view=Grid%20view')
       .header('Authorization', 'Bearer keyLVEYQelX6aEgaR');
 
+    var locationsRequest = d3.json('https://api.airtable.com/v0/appQWZIOAEl6UiPa3/locations?view=map_view&filterByFormula=NOT({lat}="")')
+      .header('Authorization', 'Bearer keyLVEYQelX6aEgaR');
+
     d3.queue()
       .defer(d3.json, 'data/us-states-simplified.json')
       .defer(claimsRequest.get)
+      .defer(locationsRequest.get)
       .await(dataReady);
 
   </script>
