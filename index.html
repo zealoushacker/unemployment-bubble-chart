@@ -39,8 +39,28 @@
 
     var _states, _claims, _stateClaims = {}, _locations;
 
+    var drawMapCircles = function(layoffs) {
+      var circleGroup = svg.selectAll('circle')
+        .data(_locations.records)
+        .enter()
+        .append('g')
+        .attr('transform', function(d) {
+          return 'translate('+ projection([d.fields.lon, d.fields.lat])+')';
+                    })
+        .attr('class', 'city');
+
+      circleGroup
+        .append('circle')
+        .style('fill', 'red')
+        .style("stroke", "grey")
+        .style('fill-opacity', .8)
+        .attr('r', 5)
+    };
+
     var layoffsDataReady = function(error, layoffs) {
       if (error) throw error;
+
+      drawMapCircles(layoffs);
     }
 
     var dataReady = function(error, states, claims, locations) {
