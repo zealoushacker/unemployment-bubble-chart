@@ -11,14 +11,18 @@
   <script src='//cdn.rawgit.com/Caged/d3-tip/v0.8.0-alpha.1/index.js'></script>
 
   <script>
-     var tip = d3.tip()
-      .attr('class', 'd3-tip')
-      .offset([0, 0])
-      .html(function(d) {
-        return '<div>' + d.properties.STATE + '</div>' +
-          '<div>' + getNumberOfClaimsForState(d.properties.STATE) + '</div>' +
-          '<div>unemployed</div>';
-      });
+    var numberWithCommas = function(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+   var tip = d3.tip()
+    .attr('class', 'd3-tip b-r-6')
+    .offset([0, 0])
+    .html(function(d) {
+      return '<div class="has-text-weight-bold m-b-2">' + d.properties.STATE + '</div>' +
+        '<div class="has-text-danger m-b-1 is-size-7">' + numberWithCommas(getNumberOfClaimsForState(d.properties.STATE)) + '</div>' +
+        '<div class="has-text-danger is-size-7">Unemployed</div>';
+    });
 
     var getColorForNumberOfClaims = function(stateName) {
       var stateClaims = getNumberOfClaimsForState(stateName); 
