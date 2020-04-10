@@ -18,6 +18,14 @@
    var tip = d3.tip()
     .attr('class', 'd3-tip b-r-6')
     .offset([0, 0])
+    .direction(function(d) {
+      states = ["Washington", "Oregon","Idaho", "Montana", "North Dakota", "Minnesota", "Wisconsin", "Michigan", "New Hampshire", "Maine", "Vermont"]
+      if (states.includes(d.properties.STATE)) {
+        return "s";
+      } else {
+        return "n"
+      }
+    })
     .html(function(d) {
       return '<div class="has-text-weight-bold m-b-2">' + d.properties.STATE + '</div>' +
         '<div class="has-text-danger m-b-1 is-size-7">' + numberWithCommas(getNumberOfClaimsForState(d.properties.STATE)) + '</div>' +
