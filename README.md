@@ -1,6 +1,8 @@
 # unemployment-bubble-chart
 
-This will display the unemployment data for all US states as a bubble chart, cumulative, used to display effects of COVID-19.
+* This will display the aggregate unemployment data for all US states as a choropleth.
+* Used to display effects of COVID-19 on unemployment claims.
+* We pull data weekly from https://www.dol.gov/ui/data.pdf and aggregate it.
 
 ## Build instructions
 
