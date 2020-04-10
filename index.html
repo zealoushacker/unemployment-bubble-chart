@@ -47,15 +47,15 @@
 
     var _claimsColorScale;
 
-    var _states, _claims, _stateClaims = {}, _locations;
+    var _states, _claims, _stateClaims = {}, _mostRecentLayoffsByLocation;
 
-    var drawMapCircles = function(layoffs) {
+    var drawMostRecentLayoffsByLocation = function(layoffs) {
       var circleGroup = svg.selectAll('circle')
-        .data(_locations.records)
+        .data(layoffs.records)
         .enter()
         .append('g')
         .attr('transform', function(d) {
-          return 'translate('+ projection([d.fields.lon, d.fields.lat])+')';
+          return 'translate('+ projection([d.fields.lon[0], d.fields.lat[0]])+')';
                     })
         .attr('class', 'city');
 
@@ -67,20 +67,14 @@
         .attr('r', 5)
     };
 
-    var layoffsDataReady = function(error, layoffs) {
-      if (error) throw error;
-
-      drawMapCircles(layoffs);
-    }
-
-    var dataReady = function(error, states, claims, locations) {
+    var dataReady = function(error, states, claims, layoffs) {
       if (error) throw error;
       _states = states;
       _claims = claims;
-      _locations = locations;
-      var claimsNumbers = claims.records.flatMap(function(claim) { return claim.fields.claims; });
-      var minClaims = Math.min(...claimsNumbers);
-      var maxClaims = Math.max(...claimsNumbers);
+      _mostRecentLayoffsByLocation = layoffs;
+
+      var minClaims = claims.records[claims.records.length - 1].fields.claims;
+      var maxClaims = claims.records[0].fields.claims;
 
       _claimsColorScale = d3.scaleQuantize()
         .domain([minClaims, maxClaims])
@@ -93,17 +87,7 @@
       });
 
       renderMap(_states, _claims);
-
-      var layoffRecordIds = (locations.records.flatMap(function(r) {
-        return 'RECORD_ID()=\'' + r.fields.layoffs + '\'';
-      })).join(','); 
-
-      var layoffsRequest = d3.json('https://api.airtable.com/v0/appQWZIOAEl6UiPa3/people?view=map_view&&filterByFormula=OR("' + layoffRecordIds + '")')
-        .header('Authorization', 'Bearer keyLVEYQelX6aEgaR');
-
-      d3.queue()
-        .defer(layoffsRequest.get)
-        .await(layoffsDataReady)
+      drawMostRecentLayoffsByLocation(layoffs);
     }
 
     var renderMap = function(states, claims) {
@@ -136,13 +120,13 @@
     var claimsRequest = d3.json('https://api.airtable.com/v0/appQWZIOAEl6UiPa3/ui_claims?view=Grid%20view')
       .header('Authorization', 'Bearer keyLVEYQelX6aEgaR');
 
-    var locationsRequest = d3.json('https://api.airtable.com/v0/appQWZIOAEl6UiPa3/locations?view=map_view&filterByFormula=NOT({lat}="")')
+    var mostRecentLayoffsByLocationRequest = d3.json('https://api.airtable.com/v0/appQWZIOAEl6UiPa3/people?view=map_view')
       .header('Authorization', 'Bearer keyLVEYQelX6aEgaR');
 
     d3.queue()
       .defer(d3.json, 'data/us-states-simplified.json')
       .defer(claimsRequest.get)
-      .defer(locationsRequest.get)
+      .defer(mostRecentLayoffsByLocationRequest.get)
       .await(dataReady);
 
   </script>
