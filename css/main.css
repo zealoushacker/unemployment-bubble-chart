@@ -35,6 +35,15 @@ body {
   stroke-width: 1px;
 }
 
+.profile-image {
+  max-height: 75px;
+  max-width: 100px;
+}
+
+.city-person-modal {
+  max-width: 100px;
+}
+
 .bubble {
   fill: #FF5964;
   stroke: #fff;

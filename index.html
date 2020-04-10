@@ -11,7 +11,7 @@
   <script src='//cdn.rawgit.com/Caged/d3-tip/v0.8.0-alpha.1/index.js'></script>
 
   <script>
-   var tip = d3.tip()
+   var stateInfoTip = d3.tip()
     .attr('class', 'd3-tip b-r-6')
     .offset([0, 0])
     .direction(function(d) {
@@ -26,6 +26,24 @@
       return '<div class="has-text-weight-bold m-b-2">' + d.properties.STATE + '</div>' +
         '<div class="has-text-danger m-b-1 is-size-7">' + getNumberOfClaimsForState(d.properties.STATE).toLocaleString() + '</div>' +
         '<div class="has-text-danger is-size-7">Unemployed</div>';
+    });
+
+   var cityPersonModal = d3.tip()
+    .attr('class', 'd3-tip b-r-6')
+    .offset([0, 0])
+    .html(function(d) {
+      return '<div class="city-person-modal">' +
+        '<div><img src="' + d.fields.photo[0].url + '" class="profile-image"/></div>' +
+        '<div>' + d.fields.name + '</div>' +
+        '<div>' + d.fields.title + '</div>' +
+        '<div>' + d.fields.locations[0] + '</div>' +
+        '<div>' + d.fields.bio + '</div>' +
+        '<div>' +  
+          '<a href="mailto:' + d.fields.email + '" alt="Email"><img src=""/></a>' +
+          '<a href="' + d.fields.resume[0].url + '" alt="Resume"><img src=""/></a>' +
+          '<a href="' + d.fields.linkedin_url + '" alt="LinkedIn"><img src=""/></a>' +
+        '</div>' +
+      '</div>';
     });
 
     var getColorForNumberOfClaims = function(stateName) {
@@ -60,6 +78,7 @@
         .style('fill', '#38D665')
         .style("stroke", "#ffffff")
         .attr('r', 5)
+        .on('click', cityPersonModal.show)
     };
 
     var dataReady = function(error, states, claims, layoffs) {
@@ -97,8 +116,8 @@
           return getColorForNumberOfClaims(st.properties.STATE) 
         })
         .attr('d', path)
-        .on('mouseover', tip.show)
-        .on('mouseout', tip.hide);
+        .on('mouseover', stateInfoTip.show)
+        .on('mouseout', stateInfoTip.hide);
     }
 
     var svg = d3.select('#container').append('svg')
@@ -108,7 +127,8 @@
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .classed('svg-content', true);
 
-    svg.call(tip);
+    svg.call(stateInfoTip);
+    svg.call(cityPersonModal);
     var projection = d3.geoAlbersUsa();
     var path = d3.geoPath().projection(projection);
 
