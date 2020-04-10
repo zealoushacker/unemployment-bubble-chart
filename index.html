@@ -43,6 +43,7 @@
           '<a href="' + d.fields.resume[0].url + '" alt="Resume"><img src=""/></a>' +
           '<a href="' + d.fields.linkedin_url + '" alt="LinkedIn"><img src=""/></a>' +
         '</div>' +
+        '<div><a href="#">View More People</a></div>' +
       '</div>';
     });
 
@@ -117,7 +118,8 @@
         })
         .attr('d', path)
         .on('mouseover', stateInfoTip.show)
-        .on('mouseout', stateInfoTip.hide);
+        .on('mouseout', stateInfoTip.hide)
+        .on('click', cityPersonModal.hide);
     }
 
     var svg = d3.select('#container').append('svg')
