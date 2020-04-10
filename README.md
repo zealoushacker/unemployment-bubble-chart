@@ -2,12 +2,9 @@
 
 This will display the unemployment data for all US states as a bubble chart, cumulative, used to display effects of COVID-19.
 
-Current weeks included: week ending 03/28/2020 and 03/21/2020.
-
 ## Build instructions
 
 * Pull down this repo
-* `$ make clean && make all`
 * For development, make sure that you have an HTTP Server that can serve up `index.html` 
   * example: `$ python -m SimpleHTTPServer 7800`, if you have python SimpleHTTPServer
 * Fire up your favorite HTTP server in the root directory 
@@ -15,7 +12,7 @@ Current weeks included: week ending 03/28/2020 and 03/21/2020.
 
 ## Deploy instructions
 
-* Deploy `index.html` and `build/` to your favorite static site host
+* Deploy `index.html` and `./css` to your favorite static site host.
 
 ## Attributions
 
@@ -23,3 +20,4 @@ This draws inspiration from the following:
 
 * https://apps.npr.org/dailygraphics/graphics/coronavirus-d3-us-map-20200312/ 
 * https://bost.ocks.org/mike/bubble-map/  
+* https://gist.github.com/bradoyler/5adf1567be59283d3e882035e0371ed1
