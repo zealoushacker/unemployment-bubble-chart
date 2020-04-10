@@ -8,6 +8,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
+  background: black;
 }
 
 .svg-container {
@@ -28,7 +29,7 @@ body {
 
 .state {
   fill: #ccc;
-  stroke: #fff;
+  stroke: #53535F;
   stroke-linejoin: round;
   stroke-linecap: round;
   stroke-width: 1px;
