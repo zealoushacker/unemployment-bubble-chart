@@ -39,6 +39,12 @@ body {
   opacity: 100%;
 }
 
+.city {
+  cursor: pointer;
+  fill: #38D665;
+  stroke: #fff;
+}
+
 .profile-image {
   max-height: 75px;
   max-width: 100px;
@@ -52,17 +58,6 @@ body {
   position: absolute;
   right: 0;
   top: 0;
-}
-
-.bubble {
-  fill: #FF5964;
-  stroke: #fff;
-  stroke-width: .5px;
-}
-
-.bubble :hover {
-  stroke: #000;
-  cursor: pointer;
 }
 
 .d3-tip {
