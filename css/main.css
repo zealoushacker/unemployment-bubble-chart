@@ -28,11 +28,15 @@ body {
 }
 
 .state {
-  fill: #ccc;
   stroke: #53535F;
   stroke-linejoin: round;
   stroke-linecap: round;
   stroke-width: 1px;
+  opacity: 80%;
+}
+
+.state:hover {
+  opacity: 100%;
 }
 
 .profile-image {
