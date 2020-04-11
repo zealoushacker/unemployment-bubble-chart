@@ -43,11 +43,25 @@
           '<a href="' + d.fields.resume[0].url + '" alt="Resume"><img src=""/></a>' +
           '<a href="' + d.fields.linkedin_url + '" alt="LinkedIn"><img src=""/></a>' +
         '</div>' +
-        '<div><a href="javascript:showCityPeopleModal()">View More People</a></div>' +
+        '<div><a href="javascript:showCityPeopleModal(\'' + d.fields.locations[0] + '\')">View More People</a></div>' +
       '</div>';
     });
 
-    var showCityPeopleModal = function() {
+    var showCityPeopleModal = function(location) {
+      d3.select('#city-people-modal')
+        .selectAll('div')
+        .remove();
+
+      d3.select('#city-people-modal')
+        .selectAll('div')
+        .data(_mostRecentLayoffsByLocation.records.filter(function(r) { return r.fields.locations[0] == location; }))
+        .enter()
+        .append('div')
+        .html(function(d) { 
+          return '<div><img src="' + d.fields.photo[0].url + '" class="profile-image"/></div>' +
+            '<div>' + d.fields.name + '</div>' +
+            '<div>' + d.fields.title + '</div>'
+        });
       d3.select('#city-people-modal').attr('style', 'opacity: 1');
     };
 
@@ -107,17 +121,6 @@
 
       renderMap(_states, _claims);
       drawMostRecentLayoffsByLocation(layoffs);
-
-      d3.select('#city-people-modal')
-        .selectAll('div')
-        .data(layoffs.records)
-        .enter()
-        .append('div')
-        .html(function(d) { 
-          return '<div><img src="' + d.fields.photo[0].url + '" class="profile-image"/></div>' +
-            '<div>' + d.fields.name + '</div>' +
-            '<div>' + d.fields.title + '</div>'
-        });
     }
 
     var renderMap = function(states, claims) {
