@@ -29,21 +29,38 @@
     });
 
    var cityPersonModal = d3.tip()
-    .attr('class', 'd3-tip b-r-6')
+    // .attr('class', 'd3-tip b-r-6')
     .offset([0, 0])
     .html(function(d) {
       return '<div class="city-person-modal">' +
-        '<div><img src="' + d.fields.photo[0].url + '" class="profile-image"/></div>' +
-        '<div>' + d.fields.name + '</div>' +
-        '<div>' + d.fields.title + '</div>' +
-        '<div>' + d.fields.locations[0] + '</div>' +
-        '<div>' + d.fields.bio + '</div>' +
-        '<div>' +  
-          '<a href="mailto:' + d.fields.email + '" alt="Email"><img src=""/></a>' +
-          '<a href="' + d.fields.resume[0].url + '" alt="Resume"><img src=""/></a>' +
-          '<a href="' + d.fields.linkedin_url + '" alt="LinkedIn"><img src=""/></a>' +
+        '<div class="card has-background-black">' +
+          '<div class="card-image">' +
+            '<figure class="image is-4by3">' +
+              '<img src="' + d.fields.photo[0].url + '" alt="Placeholder image"> style="object-fit: cover">' +
+            '</figure>' +
+          '</div>' +
+          '<div class="card-content p-3">' +
+            '<p class="title is-size-8 has-text-white m-b-2">' + d.fields.name + '</p>' +
+            '<p class="is-size-9">' +
+              d.fields.title +
+              '<br>' +
+              d.fields.company +
+              '<br>' +
+              d.fields.locations[0] +
+            '</p>' +
+            '<p class="is-size-9 m-t-2">' +
+              d.fields.bio +
+            '</p>' +
+            '<p class="is-size-9 m-t-2">' +
+              '<a href="mailto:' + d.fields.email + '" alt="Email" class="m-r-2"><img src=""/><i class="mdi mdi-email"></i></a>' +
+              '<a href="' + d.fields.resume[0].url + '" alt="Resume" class="m-r-2"><img src=""/><i class="mdi mdi-file-document"></i></a>' +
+              '<a href="' + d.fields.linkedin_url + '" alt="LinkedIn"><img src=""/><img src=""/><i class="mdi mdi-linkedin"></i></a>' +
+            '</p>' +
+            '<p class="m-t-4">' +
+              '<a href="javascript:showCityPeopleModal(\'' + d.fields.locations[0] + '\')" class="button is-link is-fullwidth is-size-9 is-padded has-text-weight-bold">View More People</a>' +
+            '</p>' +
+          '</div>' +
         '</div>' +
-        '<div><a href="javascript:showCityPeopleModal(\'' + d.fields.locations[0] + '\')">View More People</a></div>' +
       '</div>';
     });
 
