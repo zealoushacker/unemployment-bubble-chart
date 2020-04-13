@@ -31,12 +31,13 @@
    var cityPersonModal = d3.tip()
     // .attr('class', 'd3-tip b-r-6')
     .offset([0, 0])
+    .direction("s")
     .html(function(d) {
       return '<div class="city-person-modal">' +
         '<div class="card has-background-black">' +
           '<div class="card-image">' +
             '<figure class="image is-4by3">' +
-              '<img src="' + d.fields.photo[0].url + '" alt="Placeholder image"> style="object-fit: cover">' +
+              '<img src="' + d.fields.photo[0].url + '" alt="Placeholder image" style="object-fit: cover">' +
             '</figure>' +
           '</div>' +
           '<div class="card-content p-3">' +
