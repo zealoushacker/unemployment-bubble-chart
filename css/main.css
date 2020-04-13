@@ -50,8 +50,11 @@ body {
   max-width: 100px;
 }
 
-.city-person-modal {
+#city-person-modal {
   max-width: 250px;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 #city-people-modal {

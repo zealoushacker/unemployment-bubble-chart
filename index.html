@@ -28,41 +28,50 @@
         '<div class="has-text-danger is-size-7">Unemployed</div>';
     });
 
-   var cityPersonModal = d3.tip()
-    // .attr('class', 'd3-tip b-r-6')
-    .offset([0, 0])
-    .html(function(d) {
-      return '<div class="city-person-modal">' +
-        '<div class="card has-background-black">' +
-          '<div class="card-image">' +
-            '<figure class="image is-4by3">' +
-              '<img src="' + d.fields.photo[0].url + '" alt="Placeholder image"> style="object-fit: cover">' +
-            '</figure>' +
-          '</div>' +
-          '<div class="card-content p-3">' +
-            '<p class="title is-size-8 has-text-white m-b-2">' + d.fields.name + '</p>' +
-            '<p class="is-size-9 has-text-grey-light">' +
-              d.fields.title +
-              '<br>' +
-              d.fields.company +
-              '<br>' +
-              d.fields.locations[0] +
-            '</p>' +
-            '<p class="is-size-9 m-t-2 has-text-grey-light">' +
-              d.fields.bio +
-            '</p>' +
-            '<p class="is-size-9 m-t-3 has-text-grey-light">' +
-              '<a href="mailto:' + d.fields.email + '" alt="Email" class="m-r-2"><img src=""/><i class="mdi mdi-email"></i></a>' +
-              '<a href="' + d.fields.resume[0].url + '" alt="Resume" class="m-r-2"><img src=""/><i class="mdi mdi-file-document"></i></a>' +
-              '<a href="' + d.fields.linkedin_url + '" alt="LinkedIn"><img src=""/><img src=""/><i class="mdi mdi-linkedin"></i></a>' +
-            '</p>' +
-            '<p class="m-t-4">' +
-              '<a href="javascript:showCityPeopleModal(\'' + d.fields.locations[0] + '\')" class="button is-link is-fullwidth is-size-9 is-padded has-text-weight-bold">View More People</a>' +
-            '</p>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
-    });
+    var showCityPersonModal = function(d) { 
+      d3.select('#city-person-modal')
+        .selectAll('div')
+        .remove();
+
+      d3.select('#city-person-modal')
+        .datum(d.fields)
+        .append('div')
+        .html(function(person) { 
+          return '<div class="card has-background-black">' +
+              '<div class="card-image">' +
+                '<figure class="image is-4by3">' +
+                  '<img src="' + person.photo[0].url + '" alt="Placeholder image"> style="object-fit: cover">' +
+                '</figure>' +
+              '</div>' +
+              '<div class="card-content p-3">' +
+                '<p class="title is-size-8 has-text-white m-b-2">' + person.name + '</p>' +
+                '<p class="is-size-9 has-text-grey-light">' +
+                  person.title +
+                  '<br>' +
+                  person.company +
+                  '<br>' +
+                  person.locations[0] +
+                '</p>' +
+                '<p class="is-size-9 m-t-2 has-text-grey-light">' +
+                  person.bio +
+                '</p>' +
+                '<p class="is-size-9 m-t-3 has-text-grey-light">' +
+                  '<a href="mailto:' + person.email + '" alt="Email" class="m-r-2"><img src=""/><i class="mdi mdi-email"></i></a>' +
+                  '<a href="' + person.resume[0].url + '" alt="Resume" class="m-r-2"><img src=""/><i class="mdi mdi-file-document"></i></a>' +
+                  '<a href="' + person.linkedin_url + '" alt="LinkedIn"><img src=""/><img src=""/><i class="mdi mdi-linkedin"></i></a>' +
+                '</p>' +
+                '<p class="m-t-4">' +
+                  '<a href="javascript:showCityPeopleModal(\'' + person.locations[0] + '\')" class="button is-link is-fullwidth is-size-9 is-padded has-text-weight-bold">View More People</a>' +
+                '</p>' +
+              '</div>' +
+            '</div>';
+        });
+      d3.select('#city-person-modal').attr('style', 'opacity: 1');
+    };
+
+    var hideCityPersonModal = function() {
+      d3.select('#city-person-modal').attr('style', 'opacity: 0');
+    };
 
     var showCityPeopleModal = function(location) {
       d3.select('#city-people-modal')
@@ -112,7 +121,7 @@
       circleGroup
         .append('circle')
         .attr('r', 5)
-        .on('click', cityPersonModal.show)
+        .on('click', function(d, i) { showCityPersonModal(d) });
     };
 
     var dataReady = function(error, states, claims, layoffs) {
@@ -152,7 +161,7 @@
         .attr('d', path)
         .on('mouseover', stateInfoTip.show)
         .on('mouseout', stateInfoTip.hide)
-        .on('click', cityPersonModal.hide);
+        .on('click', hideCityPersonModal);
     }
 
     var svg = d3.select('#container').append('svg')
@@ -163,7 +172,6 @@
       .classed('svg-content', true);
 
     svg.call(stateInfoTip);
-    svg.call(cityPersonModal);
     var projection = d3.geoAlbersUsa();
     var path = d3.geoPath().projection(projection);
 
@@ -180,6 +188,7 @@
       .await(dataReady);
 
   </script>
-  <div id='city-people-modal' style='opacity: 0; z-index: -1' class='d3-tip'></div>
+  <div id='city-person-modal' style='opacity: 0;' class='d3-tip'></div>
+  <div id='city-people-modal' style='opacity: 0;' class='d3-tip'></div>
 </body>
 </html>
