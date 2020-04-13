@@ -45,6 +45,17 @@ body {
   stroke: #fff;
 }
 
+.close {
+  color: #fff;
+  font-size: 30px;
+  font-weight: bold;
+  z-index: 999;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+
 .profile-image {
   max-height: 75px;
   max-width: 100px;

@@ -10,6 +10,8 @@
   <script src="//d3js.org/topojson.v1.min.js"></script>
   <script src='//cdn.rawgit.com/Caged/d3-tip/v0.8.0-alpha.1/index.js'></script>
 
+  <div id='city-person-modal' style='opacity: 0;' class='d3-tip'><span class="close">x</span></div>
+  <div id='city-people-modal' style='opacity: 0;' class='d3-tip'><span class="close">x</span></div>
   <script>
    var stateInfoTip = d3.tip()
     .attr('class', 'd3-tip b-r-6')
@@ -35,7 +37,7 @@
 
       d3.select('#city-person-modal')
         .datum(d.fields)
-        .append('div')
+        .insert('div', ':first-child')
         .html(function(person) { 
           return '<div class="card has-background-black">' +
               '<div class="card-image">' +
@@ -82,7 +84,7 @@
         .selectAll('div')
         .data(_mostRecentLayoffsByLocation.records.filter(function(r) { return r.fields.locations[0] == location; }))
         .enter()
-        .append('div')
+        .insert('div', ':first-child')
         .html(function(d) { 
           return '<div><img src="' + d.fields.photo[0].url + '" class="profile-image"/></div>' +
             '<div>' + d.fields.name + '</div>' +
@@ -187,8 +189,17 @@
       .defer(mostRecentLayoffsByLocationRequest.get)
       .await(dataReady);
 
+    document.querySelectorAll('.close').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        e.target.parentNode.style.opacity = 0; 
+
+      }, false);
+    });
+
+
   </script>
-  <div id='city-person-modal' style='opacity: 0;' class='d3-tip'></div>
-  <div id='city-people-modal' style='opacity: 0;' class='d3-tip'></div>
+
 </body>
 </html>
