@@ -6,129 +6,13 @@
 </head>
 <body>
   <div id="container" class="svg-container"></div>
-  <script src='//d3js.org/d3.v4.min.js'></script>
+  <script src="//d3js.org/d3.v4.min.js"></script>
   <script src="//d3js.org/topojson.v1.min.js"></script>
-  <script src='//cdn.rawgit.com/Caged/d3-tip/v0.8.0-alpha.1/index.js'></script>
+  <script src="//cdn.rawgit.com/Caged/d3-tip/v0.8.0-alpha.1/index.js"></script>
 
-  <script>
-    var numberWithCommas = function(x) {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
+  <div id="person-modal" style="display: none;"></div>
+  <div id="list-modal" style="display: none;"></div>
+  <script src="js/main.js"> </script>
 
-   var tip = d3.tip()
-    .attr('class', 'd3-tip b-r-6')
-    .offset([0, 0])
-    .direction(function(d) {
-      states = ["Washington", "Oregon","Idaho", "Montana", "North Dakota", "Minnesota", "Wisconsin", "Michigan", "New Hampshire", "Maine", "Vermont"]
-      if (states.includes(d.properties.STATE)) {
-        return "s";
-      } else {
-        return "n"
-      }
-    })
-    .html(function(d) {
-      return '<div class="has-text-weight-bold m-b-2">' + d.properties.STATE + '</div>' +
-        '<div class="has-text-danger m-b-1 is-size-7">' + numberWithCommas(getNumberOfClaimsForState(d.properties.STATE)) + '</div>' +
-        '<div class="has-text-danger is-size-7">Unemployed</div>';
-    });
-
-    var getColorForNumberOfClaims = function(stateName) {
-      var stateClaims = getNumberOfClaimsForState(stateName); 
-      if (!stateClaims) {
-        return '#ccc';
-      } else {
-        return _claimsColorScale(stateClaims);
-      }
-    };
-
-    var getNumberOfClaimsForState = function(stateName) {
-      return _stateClaims[stateName]; 
-    };
-
-    var _claimsColorScale;
-
-    var _states, _claims, _stateClaims = {}, _mostRecentLayoffsByLocation;
-
-    var drawMostRecentLayoffsByLocation = function(layoffs) {
-      var circleGroup = svg.selectAll('circle')
-        .data(layoffs.records)
-        .enter()
-        .append('g')
-        .attr('transform', function(d) {
-          return 'translate('+ projection([d.fields.lon[0], d.fields.lat[0]])+')';
-                    })
-        .attr('class', 'city');
-
-      circleGroup
-        .append('circle')
-        .style('fill', 'red')
-        .style("stroke", "grey")
-        .style('fill-opacity', .8)
-        .attr('r', 5)
-    };
-
-    var dataReady = function(error, states, claims, layoffs) {
-      if (error) throw error;
-      _states = states;
-      _claims = claims;
-      _mostRecentLayoffsByLocation = layoffs;
-
-      var minClaims = claims.records[claims.records.length - 1].fields.claims;
-      var maxClaims = claims.records[0].fields.claims;
-
-      _claimsColorScale = d3.scaleQuantize()
-        .domain([minClaims, maxClaims])
-        .range(['#3B3137', '#4D383E', '#604045', '#523134', '#95565B', '#A95E63', '#BB666A' , '#CE6E71' , '#E07769']);
-
-
-      // build up the state claim numbers map for easy retrieval later
-      _claims.records.forEach(function(claim) {
-        _stateClaims[claim.fields.state] = claim.fields.claims;
-      });
-
-      renderMap(_states, _claims);
-      drawMostRecentLayoffsByLocation(layoffs);
-    }
-
-    var renderMap = function(states, claims) {
-      svg.selectAll('*').remove(); // clear for re-render
-      
-      svg.selectAll('.states')
-        .data(topojson.feature(states, states.objects.states).features)
-        .enter()
-        .append('path')
-        .attr('class', 'state')
-        .style('fill', function (st) { 
-          return getColorForNumberOfClaims(st.properties.STATE) 
-        })
-        .attr('d', path)
-        .on('mouseover', tip.show)
-        .on('mouseout', tip.hide);
-    }
-
-    var svg = d3.select('#container').append('svg')
-      .attr('xmlns', 'http://www.w3.org/2000/svg')
-      .attr('version', '1.1')
-      .attr('viewBox', '0 0 900 500')
-      .attr('preserveAspectRatio', 'xMidYMid meet')
-      .classed('svg-content', true);
-
-    svg.call(tip);
-    var projection = d3.geoAlbersUsa();
-    var path = d3.geoPath().projection(projection);
-
-    var claimsRequest = d3.json('https://api.airtable.com/v0/appQWZIOAEl6UiPa3/ui_claims?view=Grid%20view')
-      .header('Authorization', 'Bearer keyLVEYQelX6aEgaR');
-
-    var mostRecentLayoffsByLocationRequest = d3.json('https://api.airtable.com/v0/appQWZIOAEl6UiPa3/people?view=map_view')
-      .header('Authorization', 'Bearer keyLVEYQelX6aEgaR');
-
-    d3.queue()
-      .defer(d3.json, 'data/us-states-simplified.json')
-      .defer(claimsRequest.get)
-      .defer(mostRecentLayoffsByLocationRequest.get)
-      .await(dataReady);
-
-  </script>
 </body>
 </html>
