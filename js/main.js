@@ -49,8 +49,7 @@ var showPersonModal = function(d) {
             '</p>' +
             '<p class="m-t-4">' +
               '<a href="javascript:showCityPeopleModal(\'' + person.locations[0] + '\')" class="button is-link is-size-8 is-padded has-text-weight-bold">View More People</a>' +
-
-              '<a href="javascript:hideCityPersonModal()" class="button is-black is-size-8 is-padded has-text-weight-bold m-l-2"><i class="mdi mdi-close-circle mdi-18px"></a>' +
+              '<a href="javascript:hidePersonModal()" class="button is-black is-size-8 is-padded has-text-weight-bold m-l-2"><i class="mdi mdi-close-circle mdi-18px"></a>' +
             '</p>' +
           '</div>' +
         '</div>';
@@ -58,7 +57,7 @@ var showPersonModal = function(d) {
   d3.select('#person-modal').attr('style', 'display: block');
 };
 
-var hideCityPersonModal = function() {
+var hidePersonModal = function() {
   d3.select('#person-modal').attr('style', 'display: none');
 };
 
@@ -154,7 +153,7 @@ var renderMap = function(states, claims) {
     .attr('d', path)
     .on('mouseover', stateInfoTip.show)
     .on('mouseout', stateInfoTip.hide)
-    .on('click', hideCityPersonModal);
+    .on('click', hidePersonModal);
 }
 
 var svg = d3.select('#container').append('svg')
