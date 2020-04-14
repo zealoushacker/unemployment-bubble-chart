@@ -84,7 +84,7 @@ var showListModal = function(location) {
             '<article class="media">' +
               '<figure class="media-left">' +
                 '<p class="image is-48x48">' +
-                  '<img src="' + d.fields.photo[0].url + '" style="object-fit: cover">' +
+                  '<img src="' + d.fields.photo[0].url + '" class="is-rounded">' +
                 '</p>' +
               '</figure>' +
               '<div class="media-content">' +
@@ -92,7 +92,7 @@ var showListModal = function(location) {
                   '<p class="is-size-7 has-text-white has-text-weight-bold m-b-1">' +
                     d.fields.name +
                   '</p>' +
-                  '<p class="is-size-8 has-text-grey-light">' +
+                  '<p class="is-size-8 has-text-grey-light" style="height: 1.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' +
                     d.fields.title +
                   '</p>' +
                 '</div>' +

@@ -50,6 +50,7 @@ body {
 
 #list-modal {
   max-width: 300px;
+  min-width: 300px;
   position: absolute;
   right: 0;
   top: 0;
