@@ -1,5 +1,5 @@
 var stateInfoTip = d3.tip()
-  .attr('class', 'd3-tip b-r-6')
+  .attr('class', 'd3-tip b-r-6 shadow')
   .offset([0, 0])
   .direction(function(d) {
     states = ["Washington", "Oregon","Idaho", "Montana", "North Dakota", "Minnesota", "Wisconsin", "Michigan", "New Hampshire", "Maine", "Vermont"]
@@ -26,7 +26,7 @@ var showPersonModal = function(d) {
     .html(function(person) {
       photo_url = "https://res.cloudinary.com/hireclub/image/fetch/w_400,h_300,c_fill,g_face,f_auto/" + person.photo[0].url
       
-      return '<div class="card has-background-black b-r-8">' +
+      return '<div class="card has-background-black b-r-8 shadow">' +
           '<div class="card-image">' +
             '<figure class="image is-4by3">' +
               '<img src="' + photo_url + '" alt="Placeholder image" style="object-fit: cover">' +
@@ -87,9 +87,7 @@ var showListModal = function(location) {
     .enter()
     .insert('div')
     .html(function(d) { 
-      return '<div class="card has-background-black b-r-8">' +
-          '<div class="card-content p-4">' +
-            '<article class="media">' +
+      return '<article class="media m-b-3">' +
               '<figure class="media-left">' +
                 '<p class="image is-48x48">' +
                   '<img src="' + 
@@ -99,17 +97,15 @@ var showListModal = function(location) {
               '</figure>' +
               '<div class="media-content">' +
                 '<div class="content">' +
-                  '<p class="is-size-7 has-text-white has-text-weight-bold m-b-1">' +
+                  '<p class="is-size-8 has-text-white has-text-weight-bold m-b-1">' +
                     d.fields.name +
                   '</p>' +
-                  '<p class="is-size-8 has-text-grey-light" style="height: 1.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' +
+                  '<p class="is-size-9 has-text-grey-light" style="height: 1.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' +
                     d.fields.title +
                   '</p>' +
                 '</div>' +
               '</div>' +
-            '</article>' +
-          '</div>' +
-        '</div>';
+            '</article>';
     })
     .on('click', function(d) { showPersonModal(d); });
   d3.select('#list-modal').attr('style', 'display: block');
