@@ -30,6 +30,11 @@
         '<div class="has-text-danger is-size-7">Unemployed</div>';
     });
 
+    var closeModal = function(target) {
+      target.style.opacity = 0; 
+      target.style.display = 'none';
+    }
+
     var showCityPersonModal = function(d) { 
       d3.select('#city-person-modal')
         .selectAll('div')
@@ -91,7 +96,7 @@
             '<div>' + d.fields.name + '</div>' +
             '<div>' + d.fields.title + '</div>'
         })
-        .on('click', function(d) { showCityPersonModal(d) });
+        .on('click', function(d) { showCityPersonModal(d); });
       d3.select('#city-people-modal').attr('style', 'opacity: 1');
     };
 
@@ -125,7 +130,10 @@
       circleGroup
         .append('circle')
         .attr('r', 5)
-        .on('click', function(d, i) { showCityPersonModal(d) });
+        .on('click', function(d, i) { 
+          showCityPersonModal(d); 
+          closeModal(document.querySelector('#city-people-modal'));
+        });
     };
 
     var dataReady = function(error, states, claims, layoffs) {
@@ -195,9 +203,7 @@
       el.addEventListener('click', function(e) {
         e.preventDefault();
 
-        e.target.parentNode.style.opacity = 0; 
-        e.target.parentNode.style.display = 'none';
-
+        closeModal(e.target.parentNode);
       }, false);
     });
 
