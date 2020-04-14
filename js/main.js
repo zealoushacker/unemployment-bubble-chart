@@ -23,11 +23,13 @@ var showPersonModal = function(d) {
 
   d3.select('#person-modal')
     .datum(d.fields)
-    .html(function(person) { 
+    .html(function(person) {
+      photo_url = "https://res.cloudinary.com/hireclub/image/fetch/w_400,h_300,c_fill,g_face,f_auto/" + person.photo[0].url
+      
       return '<div class="card has-background-black b-r-8">' +
           '<div class="card-image">' +
             '<figure class="image is-4by3">' +
-              '<img src="' + person.photo[0].url + '" alt="Placeholder image" style="object-fit: cover">' +
+              '<img src="' + photo_url + '" alt="Placeholder image" style="object-fit: cover">' +
             '</figure>' +
           '</div>' +
           '<div class="card-content p-3">' +
@@ -90,7 +92,9 @@ var showListModal = function(location) {
             '<article class="media">' +
               '<figure class="media-left">' +
                 '<p class="image is-48x48">' +
-                  '<img src="' + d.fields.photo[0].url + '" class="is-rounded">' +
+                  '<img src="' + 
+                  "https://res.cloudinary.com/hireclub/image/fetch/w_100,h_100,c_fill,g_face,f_auto/" + d.fields.photo[0].url + 
+                  '" class="is-rounded">' +
                 '</p>' +
               '</figure>' +
               '<div class="media-content">' +
