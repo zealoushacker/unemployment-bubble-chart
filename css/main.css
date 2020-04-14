@@ -49,13 +49,10 @@ body {
 }
 
 #city-people-modal {
+  max-width: 300px;
   position: absolute;
   right: 0;
   top: 0;
-}
-
-.person-in-list {
-  cursor: pointer;
 }
 
 .d3-tip {

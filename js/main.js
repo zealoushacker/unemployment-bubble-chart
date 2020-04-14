@@ -49,7 +49,7 @@ var showPersonModal = function(d) {
             '</p>' +
             '<p class="m-t-4">' +
               '<a href="javascript:showCityPeopleModal(\'' + person.locations[0] + '\')" class="button is-link is-size-8 is-padded has-text-weight-bold">View More People</a>' +
-              '<a href="javascript:hidePersonModal()" class="button is-black is-size-8 is-padded has-text-weight-bold m-l-2"><i class="mdi mdi-close-circle mdi-18px"></a>' +
+              '<a href="javascript:hidePersonModal()" class="button is-black is-size-8 is-padded has-text-weight-bold m-l-2"><i class="mdi mdi-close-circle mdi-18px"></i></a>' +
             '</p>' +
           '</div>' +
         '</div>';
@@ -59,6 +59,10 @@ var showPersonModal = function(d) {
 
 var hidePersonModal = function() {
   d3.select('#person-modal').attr('style', 'display: none');
+};
+
+var hideListModal = function() {
+  d3.select('#city-people-modal').attr('style', 'display: none');
 };
 
 var showCityPeopleModal = function(location) {
@@ -71,14 +75,20 @@ var showCityPeopleModal = function(location) {
     .data(_mostRecentLayoffsByLocation.records.filter(function(r) { return r.fields.locations[0] == location; }))
     .enter()
     .insert('div', ':first-child')
-    .attr('class', 'person-in-list')
     .html(function(d) { 
-      return '<div><img src="' + d.fields.photo[0].url + '" class="profile-image"/></div>' +
-        '<div>' + d.fields.name + '</div>' +
-        '<div>' + d.fields.title + '</div>'
+      return '<div class="card has-background-black b-r-8">' +
+          '<div class="card-content p-3">' +
+            '<p class="title is-size-5 has-text-white m-b-3">' + location + 
+              '<a href="javascript:hideListModal()" class="m-l-3 has-text-white"><i class="mdi mdi-close-circle mdi-18px"></i></a>' +
+            '</p>' +
+            '<div><img src="' + d.fields.photo[0].url + '" class="profile-image"/></div>' +
+            '<div>' + d.fields.name + '</div>' +
+            '<div>' + d.fields.title + '</div>' +
+          '</div>' +
+        '</div>';
     })
     .on('click', function(d) { showPersonModal(d); });
-  d3.select('#city-people-modal').attr('style', 'opacity: 1');
+  d3.select('#city-people-modal').attr('style', 'display: block');
 };
 
 var getColorForNumberOfClaims = function(stateName) {
