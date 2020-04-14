@@ -77,13 +77,27 @@ var showListModal = function(location) {
     .insert('div', ':first-child')
     .html(function(d) { 
       return '<div class="card has-background-black b-r-8">' +
-          '<div class="card-content p-3">' +
-            '<p class="title is-size-5 has-text-white m-b-3">' + location + 
+          '<div class="card-content p-4">' +
+            '<p class="title is-size-6 has-text-white m-b-3">' + location + 
               '<a href="javascript:hideListModal()" class="m-l-3 has-text-white"><i class="mdi mdi-close-circle mdi-18px"></i></a>' +
             '</p>' +
-            '<div><img src="' + d.fields.photo[0].url + '" class="profile-image"/></div>' +
-            '<div>' + d.fields.name + '</div>' +
-            '<div>' + d.fields.title + '</div>' +
+            '<article class="media">' +
+              '<figure class="media-left">' +
+                '<p class="image is-48x48">' +
+                  '<img src="' + d.fields.photo[0].url + '" style="object-fit: cover">' +
+                '</p>' +
+              '</figure>' +
+              '<div class="media-content">' +
+                '<div class="content">' +
+                  '<p class="is-size-7 has-text-white has-text-weight-bold m-b-1">' +
+                    d.fields.name +
+                  '</p>' +
+                  '<p class="is-size-8 has-text-grey-light">' +
+                    d.fields.title +
+                  '</p>' +
+                '</div>' +
+              '</div>' +
+            '</article>' +
           '</div>' +
         '</div>';
     })
