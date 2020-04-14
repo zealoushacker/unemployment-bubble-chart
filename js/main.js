@@ -48,7 +48,7 @@ var showPersonModal = function(d) {
               '<a href="' + person.linkedin_url + '" alt="LinkedIn"><img src=""/><img src=""/><i class="mdi mdi-linkedin"></i></a>' +
             '</p>' +
             '<p class="m-t-4">' +
-              '<a href="javascript:showCityPeopleModal(\'' + person.locations[0] + '\')" class="button is-link is-size-8 is-padded has-text-weight-bold">View More People</a>' +
+              '<a href="javascript:showListModal(\'' + person.locations[0] + '\')" class="button is-link is-size-8 is-padded has-text-weight-bold">View More People</a>' +
               '<a href="javascript:hidePersonModal()" class="button is-black is-size-8 is-padded has-text-weight-bold m-l-2"><i class="mdi mdi-close-circle mdi-18px"></i></a>' +
             '</p>' +
           '</div>' +
@@ -62,15 +62,15 @@ var hidePersonModal = function() {
 };
 
 var hideListModal = function() {
-  d3.select('#city-people-modal').attr('style', 'display: none');
+  d3.select('#list-modal').attr('style', 'display: none');
 };
 
-var showCityPeopleModal = function(location) {
-  d3.select('#city-people-modal')
+var showListModal = function(location) {
+  d3.select('#list-modal')
     .selectAll('div')
     .remove();
 
-  d3.select('#city-people-modal')
+  d3.select('#list-modal')
     .selectAll('div')
     .data(_mostRecentLayoffsByLocation.records.filter(function(r) { return r.fields.locations[0] == location; }))
     .enter()
@@ -88,7 +88,7 @@ var showCityPeopleModal = function(location) {
         '</div>';
     })
     .on('click', function(d) { showPersonModal(d); });
-  d3.select('#city-people-modal').attr('style', 'display: block');
+  d3.select('#list-modal').attr('style', 'display: block');
 };
 
 var getColorForNumberOfClaims = function(stateName) {
