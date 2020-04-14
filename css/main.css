@@ -74,6 +74,10 @@ body {
   top: 0;
 }
 
+.person-in-list {
+  cursor: pointer;
+}
+
 .d3-tip {
   line-height: 1;
   padding: 12px;
