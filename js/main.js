@@ -71,16 +71,22 @@ var showListModal = function(location) {
     .remove();
 
   d3.select('#list-modal')
+    .datum(location)
+    .insert('div')
+    .html(function(d) {
+      return '<p class="title is-size-6 has-text-white m-b-3">' + location + 
+        '<a href="javascript:hideListModal()" class="m-l-3 has-text-white"><i class="mdi mdi-close-circle mdi-18px"></i></a>' +
+      '</p>'
+    });
+
+  d3.select('#list-modal')
     .selectAll('div')
     .data(_mostRecentLayoffsByLocation.records.filter(function(r) { return r.fields.locations[0] == location; }))
     .enter()
-    .insert('div', ':first-child')
+    .insert('div')
     .html(function(d) { 
       return '<div class="card has-background-black b-r-8">' +
           '<div class="card-content p-4">' +
-            '<p class="title is-size-6 has-text-white m-b-3">' + location + 
-              '<a href="javascript:hideListModal()" class="m-l-3 has-text-white"><i class="mdi mdi-close-circle mdi-18px"></i></a>' +
-            '</p>' +
             '<article class="media">' +
               '<figure class="media-left">' +
                 '<p class="image is-48x48">' +
