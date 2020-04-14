@@ -15,54 +15,51 @@ var stateInfoTip = d3.tip()
       '<div class="has-text-danger is-size-7">Unemployed</div>';
 });
 
-var closeModal = function(target) {
-  target.style.opacity = 0; 
-  target.style.display = 'none';
-}
 
-var showCityPersonModal = function(d) { 
-  d3.select('#city-person-modal')
+var showPersonModal = function(d) { 
+  d3.select('#person-modal')
     .selectAll('div')
     .remove();
 
-  d3.select('#city-person-modal')
+  d3.select('#person-modal')
     .datum(d.fields)
-    .insert('div', ':first-child')
     .html(function(person) { 
-      return '<div class="card has-background-black">' +
+      return '<div class="card has-background-black b-r-8">' +
           '<div class="card-image">' +
             '<figure class="image is-4by3">' +
               '<img src="' + person.photo[0].url + '" alt="Placeholder image" style="object-fit: cover">' +
             '</figure>' +
           '</div>' +
           '<div class="card-content p-3">' +
-            '<p class="title is-size-8 has-text-white m-b-2">' + person.name + '</p>' +
-            '<p class="is-size-9 has-text-grey-light">' +
+            '<p class="title is-size-6 has-text-white m-b-2">' + person.name + '</p>' +
+            '<p class="is-size-7 has-text-grey-light">' +
               person.title +
               '<br>' +
               person.company +
               '<br>' +
               person.locations[0] +
             '</p>' +
-            '<p class="is-size-9 m-t-2 has-text-grey-light">' +
+            '<p class="is-size-7 m-t-2 has-text-grey-light">' +
               person.bio +
             '</p>' +
-            '<p class="is-size-9 m-t-3 has-text-grey-light">' +
+            '<p class="is-size-7 m-t-3 has-text-grey-light">' +
               '<a href="mailto:' + person.email + '" alt="Email" class="m-r-2"><img src=""/><i class="mdi mdi-email"></i></a>' +
               '<a href="' + person.resume[0].url + '" alt="Resume" class="m-r-2"><img src=""/><i class="mdi mdi-file-document"></i></a>' +
               '<a href="' + person.linkedin_url + '" alt="LinkedIn"><img src=""/><img src=""/><i class="mdi mdi-linkedin"></i></a>' +
             '</p>' +
             '<p class="m-t-4">' +
-              '<a href="javascript:showCityPeopleModal(\'' + person.locations[0] + '\')" class="button is-link is-fullwidth is-size-9 is-padded has-text-weight-bold">View More People</a>' +
+              '<a href="javascript:showCityPeopleModal(\'' + person.locations[0] + '\')" class="button is-link is-size-8 is-padded has-text-weight-bold">View More People</a>' +
+
+              '<a href="javascript:hideCityPersonModal()" class="button is-black is-size-8 is-padded has-text-weight-bold m-l-2"><i class="mdi mdi-close-circle mdi-18px"></a>' +
             '</p>' +
           '</div>' +
         '</div>';
     });
-  d3.select('#city-person-modal').attr('style', 'opacity: 1');
+  d3.select('#person-modal').attr('style', 'display: block');
 };
 
 var hideCityPersonModal = function() {
-  d3.select('#city-person-modal').attr('style', 'opacity: 0');
+  d3.select('#person-modal').attr('style', 'display: none');
 };
 
 var showCityPeopleModal = function(location) {
@@ -81,7 +78,7 @@ var showCityPeopleModal = function(location) {
         '<div>' + d.fields.name + '</div>' +
         '<div>' + d.fields.title + '</div>'
     })
-    .on('click', function(d) { showCityPersonModal(d); });
+    .on('click', function(d) { showPersonModal(d); });
   d3.select('#city-people-modal').attr('style', 'opacity: 1');
 };
 
@@ -116,8 +113,7 @@ var drawMostRecentLayoffsByLocation = function(layoffs) {
     .append('circle')
     .attr('r', 5)
     .on('click', function(d, i) { 
-      showCityPersonModal(d); 
-      closeModal(document.querySelector('#city-people-modal'));
+      showPersonModal(d); 
     });
 };
 
@@ -184,10 +180,3 @@ d3.queue()
   .defer(mostRecentLayoffsByLocationRequest.get)
   .await(dataReady);
 
-document.querySelectorAll('.close').forEach(function(el) {
-  el.addEventListener('click', function(e) {
-    e.preventDefault();
-
-    closeModal(e.target.parentNode);
-  }, false);
-}); 
