@@ -46,8 +46,8 @@ var showPersonModal = function(d) {
             '</p>' +
             '<p class="is-size-7 m-t-3 has-text-grey-light">' +
               '<a href="mailto:' + person.email + '" alt="Email" class="m-r-2"><img src=""/><i class="mdi mdi-email"></i></a>' +
-              '<a href="' + person.resume[0].url + '" alt="Resume" class="m-r-2"><img src=""/><i class="mdi mdi-file-document"></i></a>' +
-              '<a href="' + person.linkedin_url + '" alt="LinkedIn"><img src=""/><img src=""/><i class="mdi mdi-linkedin"></i></a>' +
+              '<a href="' + person.resume[0].url + '" alt="Resume" target="_blank" class="m-r-2"><img src=""/><i class="mdi mdi-file-document"></i></a>' +
+              '<a href="' + person.linkedin_url + '" alt="LinkedIn" target="_blank"><img src=""/><img src=""/><i class="mdi mdi-linkedin"></i></a>' +
             '</p>' +
             '<p class="m-t-4">' +
               '<a href="javascript:showListModal(\'' + person.locations[0] + '\')" class="button is-link is-size-8 is-padded has-text-weight-bold">View More People</a>' +
