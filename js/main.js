@@ -51,12 +51,16 @@ var showPersonModal = function(d) {
             '</p>' +
             '<p class="m-t-4">' +
               '<a href="javascript:showListModal(\'' + person.locations[0] + '\')" class="button is-link is-size-8 is-padded has-text-weight-bold">View More People</a>' +
-              '<a href="javascript:hidePersonModal()" class="button is-black is-size-8 is-padded has-text-weight-bold m-l-2"><i class="mdi mdi-close-circle mdi-18px"></i></a>' +
+              '<a href="#" class="button is-black is-size-8 is-padded has-text-weight-bold m-l-2"><i class="mdi mdi-close-circle mdi-18px"></i></a>' +
             '</p>' +
           '</div>' +
         '</div>';
     });
   d3.select('#person-modal').attr('style', 'display: block');
+
+  d3.select('#person-modal .mdi-close-circle').on('click', function() {
+    hidePersonModal();
+  });
 };
 
 var hidePersonModal = function() {
