@@ -156,9 +156,10 @@ var dataReady = function(error, states, claims, layoffs) {
   var minClaims = claims.records[claims.records.length - 1].fields.claims;
   var maxClaims = claims.records[0].fields.claims;
 
-  _claimsColorScale = d3.scaleQuantize()
+  _claimsColorScale = d3.scaleLog()
     .domain([minClaims, maxClaims])
-    .range(['#280406', '#840e15', '#b3121c', '#d11621', '#e8212d']);
+    .range(['#280406', '#e8212d'])
+    .interpolate(d3.interpolateRgb);
 
 
   // build up the state claim numbers dictionary for easy retrieval later
