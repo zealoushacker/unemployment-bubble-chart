@@ -82,10 +82,11 @@ var showListModal = function(location) {
     });
 
   d3.select('#list-modal')
-    .selectAll('div')
-    .data(_mostRecentLayoffsByLocation.records.filter(function(r) { return r.fields.locations[0] == location; }))
+    .selectAll('div.person')
+    .data(_mostRecentLayoffsByLocation.records.filter(function(r) { return r.fields.locations.includes(location); }))
     .enter()
     .insert('div')
+    .attr('class', 'person')
     .html(function(d) { 
       return '<article class="media m-b-3">' +
               '<figure class="media-left">' +
