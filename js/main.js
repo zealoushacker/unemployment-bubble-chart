@@ -159,7 +159,10 @@ var drawMostRecentLayoffsByLocation = function(layoffs) {
     .append('g')
     .attr('transform', function(d) {
       return 'translate('+ projection([d.fields.lon[0], d.fields.lat[0]])+')';
-                })
+    })
+    .attr('id', function(d) { 
+      return d.fields.locations[0].toLowerCase().replace(' ', '-');
+    })
     .attr('class', 'city');
 
   circleGroup
@@ -169,22 +172,25 @@ var drawMostRecentLayoffsByLocation = function(layoffs) {
       showPersonModal(d); 
     });
 
-  d3.selectAll('circle').each(function(d,i) {
-    var c = d3.select(this);
+  var austin = d3.select('#austin-tx');
+
+  var pulse = function(c) {
     c.transition()
       .duration(100)
       .attr('stroke-width', 0)
       .attr('stroke-opacity', 0.25)
       .transition()
-      .duration(700)
-      .attr('stroke-width', 3)
+      .duration(1000)
+      .attr('stroke-width', 20)
       .attr('stroke-opacity', 0.5)
       .transition()
-      .duration(400)
+      .duration(600)
       .attr('stroke-width', 1)
       .attr('stroke-opacity', 1)
-      .ease(d3.easeSin);
-  });
+      .ease(d3.easeSin)
+      .on('end', function() { pulse(c); });
+  }
+  pulse(austin);
 };
 
 var dataReady = function(error, states, claims, layoffs) {
