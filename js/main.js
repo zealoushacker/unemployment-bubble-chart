@@ -168,6 +168,23 @@ var drawMostRecentLayoffsByLocation = function(layoffs) {
     .on('click', function(d, i) { 
       showPersonModal(d); 
     });
+
+  d3.selectAll('circle').each(function(d,i) {
+    var c = d3.select(this);
+    c.transition()
+      .duration(100)
+      .attr('stroke-width', 0)
+      .attr('stroke-opacity', 0.25)
+      .transition()
+      .duration(700)
+      .attr('stroke-width', 3)
+      .attr('stroke-opacity', 0.5)
+      .transition()
+      .duration(400)
+      .attr('stroke-width', 1)
+      .attr('stroke-opacity', 1)
+      .ease(d3.easeSin);
+  });
 };
 
 var dataReady = function(error, states, claims, layoffs) {
