@@ -60,6 +60,11 @@ body {
   cursor: pointer;
 }
 
+#person-modal .profile-pic {
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+}
+
 .d3-tip {
   line-height: 1;
   padding: 12px;
