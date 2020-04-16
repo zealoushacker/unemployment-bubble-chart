@@ -61,7 +61,7 @@ var showPersonModal = function(d) {
               '<a href="' + getAbsoluteUrl(person.linkedin_url) + '" alt="LinkedIn" target="_blank"><img src=""/><img src=""/><i class="mdi mdi-linkedin"></i></a>' +
             '</p>' +
             '<p class="m-t-4">' +
-              '<a href="javascript:showListModal(\'' + person.locations[0] + '\')" class="button is-link is-size-8 is-padded has-text-weight-bold">View More People</a>' +
+              '<a href="javascript:void(0);" class="button show-more-people is-link is-size-8 is-padded has-text-weight-bold">View More People</a>' +
               '<a href="javascript:void(0);" class="button is-black is-size-8 is-padded has-text-weight-bold m-l-2"><i class="mdi mdi-close-circle mdi-18px"></i></a>' +
             '</p>' +
           '</div>' +
@@ -71,6 +71,10 @@ var showPersonModal = function(d) {
 
   d3.select('#person-modal .mdi-close-circle').on('click', function() {
     hidePersonModal();
+  });
+
+  d3.select('#person-modal .show-more-people').on('click', function() {
+    showListModal(d.fields.locations[0])
   });
 };
 
