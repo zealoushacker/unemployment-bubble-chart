@@ -96,7 +96,7 @@ var showListModal = function(location) {
     .insert('div')
     .html(function(d) {
       return '<p class="title is-size-6 has-text-white m-b-3">' + location + 
-        '<a href="javascript:hideListModal()" class="m-l-3 has-text-white"><i class="mdi mdi-close-circle mdi-18px"></i></a>' +
+        '<a href="javascript:void(0);" class="hide-list-modal m-l-3 has-text-white"><i class="mdi mdi-close-circle mdi-18px"></i></a>' +
       '</p>'
     });
 
@@ -128,7 +128,11 @@ var showListModal = function(location) {
             '</article>';
     })
     .on('click', function(d) { showPersonModal(d); });
+
   d3.select('#list-modal').attr('style', 'display: block');
+  d3.select('#list-modal .hide-list-modal').on('click', function() {
+    hideListModal();
+  });
 };
 
 var getColorForNumberOfClaims = function(stateName) {
