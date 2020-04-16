@@ -40,7 +40,7 @@ var showPersonModal = function(d) {
       return '<div class="card has-background-black b-r-8 shadow">' +
           '<div class="card-image">' +
             '<figure class="image is-4by3">' +
-              '<img src="' + photo_url + '" alt="Placeholder image" style="object-fit: cover">' +
+              '<img class="profile-pic" src="' + photo_url + '" alt="Placeholder image" style="object-fit: cover">' +
             '</figure>' +
           '</div>' +
           '<div class="card-content p-3">' +
