@@ -3,84 +3,18 @@
 <head>
   <title>Unemployment Bubble Chart</title>
   <link rel="stylesheet" type="text/css" href="css/main.css">
+  <base target="_parent">
 </head>
 <body>
   <div id="container" class="svg-container"></div>
-  <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="//d3js.org/d3.v4.min.js"></script>
   <script src="//d3js.org/topojson.v1.min.js"></script>
+  <script src="//cdn.rawgit.com/Caged/d3-tip/v0.8.0-alpha.1/index.js"></script>
 
-  <script>
+  <div id="person-modal" style="display: none;"></div>
+  <div id="list-modal" style="display: none;" class="card has-background-black b-r-8 card-content p-3 shadow">
+  </div>
+  <script src="js/main.js"> </script>
 
-  var path = d3.geo.path()
-      .projection(null);
-
-  var radius = d3.scale.sqrt()
-      .domain([7000, 1100000])
-      .range([2, 56]);
-
-  var svg = d3.select("div#container")
-    .append("svg")
-    .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 960 600")
-    .classed("svg-content", true);
-
-  d3.json("build/us.json", function(error, us) {
-    if (error) return console.error(error);
-
-    var tooltip = d3.select("div#container")
-      .append("div")
-      .attr("class", "tooltip");
-
-    var showTooltip = function(d) {
-      var boundingClientRect = this.getBoundingClientRect(),
-        right = boundingClientRect.right,
-        left = boundingClientRect.left,
-        width = boundingClientRect.width,
-        leftOffset = parseFloat(tooltip.style("width")) + parseFloat(tooltip.style("padding")) * 2,
-        topOffset = parseFloat(tooltip.style("height")),
-        left = right > 300 ? left - leftOffset : right,
-        top = boundingClientRect.top + topOffset/2;
-
-      tooltip
-        .style("opacity", 1)
-        .html("<div>" + d.properties.name +"</div><div>" + d.properties.claims + "</div>")
-        .style("left", left + "px")
-        .style("top", top + "px");
-    };
-
-    var moveTooltip = function(d) {
-      /*
-      tooltip
-        .style("left", (d3.select(this).attr("cx") + "px"))
-        .style("top", (d3.select(this).attr("cy") + "px"));
-      */
-    };
-
-    var hideTooltip = function(d) {
-      tooltip
-        .style("opacity", 0);
-    };
-
-    svg.append("path")
-      .datum(topojson.feature(us, us.objects.nation))
-      .attr("class", "land")
-      .attr("d", path);
-
-    svg.append("path")
-      .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-      .attr("class", "border border--state")
-      .attr("d", path);
-    svg.append("g")
-      .attr("class", "bubble")
-    .selectAll("circle")
-      .data(topojson.feature(us, us.objects.states).features)
-    .enter().append("circle")
-      .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
-      .attr("r", function(d) { return radius(d.properties.claims); })
-      .on("mouseover", showTooltip )
-      .on("mouseleave", hideTooltip );
-  });
-
-  </script>
 </body>
 </html>
