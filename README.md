@@ -14,7 +14,7 @@
 
 ## Deploy instructions
 
-* Deploy `index.html` and `./css` to your favorite static site host.
+* Merge a feature branch or an up to date master into gh-pages and push to gh-pages.
 
 ## Attributions
 
