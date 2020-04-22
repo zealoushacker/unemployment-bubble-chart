@@ -150,7 +150,38 @@ var getNumberOfClaimsForState = function(stateName) {
 
 var _claimsColorScale;
 
-var _states, _claims, _stateClaims = {}, _mostRecentLayoffsByLocation;
+var _states, _claims, _stateClaims = {}, _mostRecentLayoffsByLocation, _currentlyPulsing;
+
+var pulse = function(c) {
+  // end the currently scheduled transition
+  // returning that one to its final state
+  if (_currentlyPulsing) {
+    _currentlyPulsing
+      .transition()
+      .attr('stroke-width', 1)
+      .attr('stroke-opacity', 1)
+      .duration(0);
+  }
+
+  // apply the pulse transition to the newly
+  // selected city circle
+  c.transition()
+    .duration(100)
+    .attr('stroke-width', 0)
+    .attr('stroke-opacity', 0.25)
+    .transition()
+    .duration(1000)
+    .attr('stroke-width', 20)
+    .attr('stroke-opacity', 0.5)
+    .transition()
+    .duration(600)
+    .attr('stroke-width', 1)
+    .attr('stroke-opacity', 1)
+    .ease(d3.easeSin)
+    .on('end', function() { pulse(c); });
+
+  _currentlyPulsing = c;
+};
 
 var drawMostRecentLayoffsByLocation = function(layoffs) {
   var circleGroup = svg.selectAll('circle')
@@ -169,27 +200,12 @@ var drawMostRecentLayoffsByLocation = function(layoffs) {
     .append('circle')
     .attr('r', 5)
     .on('click', function(d, i) { 
+      pulse(d3.select(this));
       showPersonModal(d); 
     });
 
   var austin = d3.select('#austin-tx');
 
-  var pulse = function(c) {
-    c.transition()
-      .duration(100)
-      .attr('stroke-width', 0)
-      .attr('stroke-opacity', 0.25)
-      .transition()
-      .duration(1000)
-      .attr('stroke-width', 20)
-      .attr('stroke-opacity', 0.5)
-      .transition()
-      .duration(600)
-      .attr('stroke-width', 1)
-      .attr('stroke-opacity', 1)
-      .ease(d3.easeSin)
-      .on('end', function() { pulse(c); });
-  }
   pulse(austin);
 };
 
